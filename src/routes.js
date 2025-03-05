@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { v4 } from "uuid";  // Importando UUID
-import User from "./app/controllers/models/User";
+
+
+import User from './app/models/Users.js' 
+
+
 
 const routes = new Router();
 

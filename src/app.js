@@ -1,5 +1,9 @@
 import express from 'express';
 import routes from './routes.js';
+
+ 
+ import './config/database.js';
+
   
 
 class App {

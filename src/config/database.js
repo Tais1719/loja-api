@@ -1,4 +1,5 @@
-const config = {
+// src/config/database.js
+export default {
   dialect: 'postgres',
   host: 'localhost',
   port: 5432,
@@ -11,5 +12,3 @@ const config = {
     underscoredAll: true,
   },
 };
-
-export default config;  // Exporte a configuração como "default"
