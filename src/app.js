@@ -1,8 +1,9 @@
 import express from 'express';
 import routes from './routes.js';
 
+import { resolve } from 'node:path'; // Importação correta
  
- import './config/database.js';
+ import './database';
 
   
 
@@ -15,6 +16,9 @@ class App {
 
     middlewares() {
         this.app.use(express.json());
+        this.app.use('/product-file',
+     express.static(resolve(__dirname, '..','uploads')),
+        )
     }
 
     routes() {
