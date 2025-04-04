@@ -4,6 +4,7 @@ import Product from '../models/product.js';
 import Category from '../models/category';
 
 
+
 class OrderController {
   async store(request, response) {
     const schema = yup.object({
@@ -60,6 +61,7 @@ class OrderController {
 
     const order = {
       user: {
+        
         id: request.userId,
         name: request.userName,
       },
@@ -76,6 +78,11 @@ class OrderController {
   
 
 
+ }
+ async index(request, response){ 
+  const orders = await Order.find()
+
+  return response.json(orders)
  }
 }
 
