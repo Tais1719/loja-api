@@ -1,7 +1,9 @@
 import * as yup from "yup";
 import Category from "../models/category.js";
+import User from "../models/User.js";
 
 class CategoryController {
+  // Método para criar uma nova categoria
   async store(request, response) {
     const schema = yup.object({
       name: yup.string().required(),
@@ -13,31 +15,101 @@ class CategoryController {
       return response.status(400).json({ error: err.errors });
     }
 
-    const { name } = request.body;
- 
-    const categoryExists = await Category.findOne({
-      where:{
-      name,
+    const { admin: isAdmin } = await User.findByPk(request.userId);
 
-      },
-    })
-
-    if(categoryExists){
-     
-      return response.status(400).json({ error: "Category already exists" });
-
-     
-
+    if (!isAdmin) {
+      return response.status(401).json();
     }
 
-    const {id}= await Category.create({
-      name,
+    // ✅ VERIFICAÇÃO ADICIONADA PARA EVITAR ERRO DE "undefined"
+    if (!request.file) {
+      return response.status(400).json({ error: 'Arquivo não enviado.' });
+    }
+
+    const { filename: path } = request.file;
+
+    const { name } = request.body;
+
+    const categoryExists = await Category.findOne({
+      where: { name },
     });
 
-    return response.status(201).json({id, name});
-    
+    if (categoryExists) {
+      return response.status(400).json({ error: "Category already exists" });
+    }
+
+    const { id } = await Category.create({
+      name,
+      path,
+    });
+
+    return response.status(201).json({ id, name });
   }
 
+  // ❌ ERRO ORIGINAL AQUI:
+  // Você tinha escrito este método `update()` DENTRO do método `store()` acima.
+  // Isso é um erro de sintaxe em JavaScript. Métodos de classe não podem ser aninhados.
+  // Corrigimos isso fechando corretamente o `store()` antes de iniciar `update()`.
+
+  // Método para atualizar uma categoria
+  async update(request, response) {
+    const schema = yup.object({
+      name: yup.string(),
+    });
+
+    try {
+      schema.validateSync(request.body, { abortEarly: false });
+    } catch (err) {
+      return response.status(400).json({ error: err.errors });
+    }
+
+    const { admin: isAdmin } = await User.findByPk(request.userId);
+
+    if (!isAdmin) {
+      return response.status(401).json();
+    }
+
+    const { id } = request.params;
+    const categoryExists = await Category.findByPk(id);
+
+    if (!categoryExists) {
+      return response.status(400).json({ message: 'Make sure your category Id is correct' });
+    }
+
+    let path;
+    if (request.file) {
+      path = request.file.filename;
+    }
+
+    const { name } = request.body;
+
+ 
+
+
+    if (name) { 
+      const categoryNameExists = await Category.findOne({
+        where: { name }, 
+      });
+
+      if (categoryNameExists && categoryExists.id === +id) { 
+        return response.status(400).json({ error: "Category already exists" });
+      }
+    }
+
+    await Category.update(
+      {
+        name,
+        path,
+      },
+      {
+        where: { id },
+      }
+    );
+
+    return response.status(200).json();
+  }
+
+  // Listar todas as categorias
   async index(request, response) {
     const categories = await Category.findAll();
     return response.json(categories);
