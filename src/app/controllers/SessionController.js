@@ -9,17 +9,17 @@ class SessionController {
       email: yup.string().email().required(),
       password: yup.string().min(6).required(),
     });
-
+ 
     const isValid = await schema.isValid(request.body);
 
-    const emailOrPasswordIncorrect = () => {
+    const UseremailOrPasswordIncorrect = () => {
       return response
         .status(401)
         .json({ error: 'Make sure your email or password are correct' });
     };
 
     if (!isValid) {
-      return emailOrPasswordIncorrect();
+      return UseremailOrPasswordIncorrect();
     }
 
     const { email, password } = request.body;
@@ -31,13 +31,13 @@ class SessionController {
     });
 
     if (!user) {
-      return emailOrPasswordIncorrect();
+      return UseremailOrPasswordIncorrect();
     }
 
     const isSamePassword = await user.checkPassword(password);
 
     if (!isSamePassword) {
-      return emailOrPasswordIncorrect();
+      return UseremailOrPasswordIncorrect();
     }
 
     return response.status(200).json({

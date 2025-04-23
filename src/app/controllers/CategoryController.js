@@ -46,12 +46,6 @@ class CategoryController {
     return response.status(201).json({ id, name });
   }
 
-  // ❌ ERRO ORIGINAL AQUI:
-  // Você tinha escrito este método `update()` DENTRO do método `store()` acima.
-  // Isso é um erro de sintaxe em JavaScript. Métodos de classe não podem ser aninhados.
-  // Corrigimos isso fechando corretamente o `store()` antes de iniciar `update()`.
-
-  // Método para atualizar uma categoria
   async update(request, response) {
     const schema = yup.object({
       name: yup.string(),

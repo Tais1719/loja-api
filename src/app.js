@@ -1,6 +1,7 @@
 import express from 'express';
 import routes from './routes.js';
-
+import cors from 'cors'
+ 
 import { resolve } from 'node:path'; // Importação correta
  
  import './database';
@@ -9,7 +10,9 @@ import { resolve } from 'node:path'; // Importação correta
 
 class App {
     constructor() {
+        
         this.app = express();
+        this.app.use(cors())
         this.middlewares();
         this.routes();
     }

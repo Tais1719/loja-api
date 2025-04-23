@@ -13,29 +13,24 @@ module.exports = {
         allowNull: false,
       },
       price: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       category: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'categories',
-          key: 'id',
-        },
+        allowNull: false,
       },
       path:{
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false,
       },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
       },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
       },
     });
   },
