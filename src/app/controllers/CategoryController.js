@@ -67,7 +67,7 @@ class CategoryController {
     const categoryExists = await Category.findByPk(id);
 
     if (!categoryExists) {
-      return response.status(400).json({ message: 'Make sure your category Id is correct' });
+      return response.status(400).json({ message: 'Make sure your category Id is cor' });
     }
 
     let path;
